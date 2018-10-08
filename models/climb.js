@@ -15,6 +15,13 @@ var ClimbSchema = new Schema({
     active:{type:Boolean},
     setter: { type: Schema.ObjectId, ref: 'Setter'}
 });
+
+ClimbSchema
+.virtual('url')
+.get(function () {
+  return '/catalog/climb/'+this._id;
+});
+
 ClimbSchema
 .virtual('date_of_set_yyyy_mm_dd')
 .get(function () {
@@ -22,5 +29,4 @@ ClimbSchema
 });
 
 
-
-module.exports = mongoose.model('Climber', ClimbSchema);
+module.exports = mongoose.model('Climb', ClimbSchema);

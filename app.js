@@ -35,11 +35,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
-<<<<<<< HEAD
-//Router
-=======
-
->>>>>>> 5d8d39af74210e2529fb7b1fe144b5729511de3e
 app.use('/', indexRouter);
 app.use('/catalog', catalogRouter);
 //This is the index file in the tutorial
@@ -71,7 +66,7 @@ app.use(function (err, req, res, next) {
 });
 //Set up mongoose connection
 var mongoose = require('mongoose');
-var mongoDB = process.env.MONGODB_URI || 'mongodb://admin:9dminpassword@ds111993.mlab.com:11993/local_library'
+var mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/climbtracker'
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
