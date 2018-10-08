@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
-
+// ADMIN for site
 var Account = new Schema({
     username: String,
     password: String

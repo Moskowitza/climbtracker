@@ -8,7 +8,7 @@ var GymSchema = new Schema({
     city: {type: String, required: true, max: 100},
     state: {type: String, required: true, max: 100},
     zipcode: {type: Number, required: true, max: 5},
-    website:{type: String, required: true, max: 100},
+    website:{type: String, required: true, max: 100}
 });
 
 module.exports = mongoose.model('Gym', GymSchema);

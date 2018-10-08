@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var WallSchema = new Schema({
-    gym: {type: String, required: true, max: 100},
+    gym: { type: Schema.ObjectId, ref: 'Gym' },
     name: {type: String, required: true, max: 100},
     attributes: [{type: String, required: true, max: 100}],
     wall_image: {type:String},

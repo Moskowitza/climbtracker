@@ -13,7 +13,8 @@ var ClimbSchema = new Schema({
     date_of_set: { type: Date },
     date_of_removal: { type: Date },
     active:{type:Boolean},
-    setter: { type: Schema.ObjectId, ref: 'Setter'}
+    setter: { type: Schema.ObjectId, ref: 'Setter'},
+    climb_image: {type:String},
 });
 
 ClimbSchema

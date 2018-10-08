@@ -20,6 +20,6 @@ SetterSchema
   return moment(this.date_of_birth).format('YYYY-MM-DD');
 });
 
-ClimberSchema.plugin(passportLocalMongoose);
+SetterSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model('Setter', SetterSchema);
