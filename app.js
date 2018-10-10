@@ -16,7 +16,19 @@ var usersRouter = require('./routes/users');
 var climbRouter = require('./routes/climbs');  //Import routes for "climbs" area of site
 
 var app = express();
-
+//Set up mongoose connection
+var mongoose = require('mongoose');
+var mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/climbtracker'
+mongoose.connect(mongoDB, { useNewUrlParser: true });
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+require('./models/climb');
+require('./models/climber');
+require('./models/climbInstance');
+require('./models/gym');
+require('./models/setter');
+require('./models/wall');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -64,12 +76,5 @@ app.use(function (err, req, res, next) {
     error: err
   });
 });
-//Set up mongoose connection
-var mongoose = require('mongoose');
-var mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/climbtracker'
-mongoose.connect(mongoDB, { useNewUrlParser: true });
-mongoose.Promise = global.Promise;
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 module.exports = app;

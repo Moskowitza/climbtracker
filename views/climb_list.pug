@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  
+  ul
+    each climb in climb_list
+      li #{climb.gym.gymname} 
+
+    //-   li #{climb.setter.usernames}
+    //-     //- a(href=climb.url) #{climb.grade} 
+    //-     //- |  (#{climb.setter.username})
+
+
+    //- else
+    //-   li There are no climbs.
