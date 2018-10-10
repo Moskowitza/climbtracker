@@ -13,7 +13,7 @@ var LocalStrategy = require('passport-local').Strategy;
 // var users = require('./routes/users');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var catalogRouter = require('./routes/catalog');  //Import routes for "catalog" area of site
+var climbRouter = require('./routes/climbs');  //Import routes for "climbs" area of site
 
 var app = express();
 
@@ -22,7 +22,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 //error logger and whatever we need cors for
 app.use(logger('dev'));
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -36,7 +36,7 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/catalog', catalogRouter);
+app.use('/climbs', climbRouter);
 //This is the index file in the tutorial
 app.use('/users', usersRouter); 
 

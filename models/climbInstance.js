@@ -20,7 +20,7 @@ ClimbInstanceSchema
   return moment(this.due_back).format('MMMM Do, YYYY');
 });
 
-BookInstanceSchema
+
 
 // Export model.
-module.exports = mongoose.model('BookInstance', BookInstanceSchema);
+module.exports = mongoose.model('ClimbInstance', ClimbInstanceSchema);

@@ -7,7 +7,7 @@ var GymSchema = new Schema({
     address: {type: String, required: true, max: 100},
     city: {type: String, required: true, max: 100},
     state: {type: String, required: true, max: 100},
-    zipcode: {type: Number, required: true, max: 5},
+    zipcode: {type: Number, required: true, max: 100000},
     website:{type: String, required: true, max: 100}
 });
 

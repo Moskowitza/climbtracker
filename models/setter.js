@@ -12,7 +12,7 @@ var SetterSchema = new Schema({
     gender: {type:String},
     height_feet: {type:Number},
     height_inch: {type:Number},
-    Gym_Memberships:[{ type: Schema.ObjectId, ref: 'Gym' }]
+    gym_memberships:[{ type: Schema.ObjectId, ref: 'Gym' }]
 });
 SetterSchema
 .virtual('date_of_birth_yyyy_mm_dd')

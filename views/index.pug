@@ -2,4 +2,14 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to #[em ClimbingTracker], to keep track of your gym climbs.
+
+  h1 Dynamic content
+  
+  if error
+    p Error getting dynamic content.
+  else
+    p This App has the following record counts:
+
+    ul
+      li #[strong Climbs:] !{data.climb_count}

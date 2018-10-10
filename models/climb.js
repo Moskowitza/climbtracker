@@ -5,7 +5,7 @@ var moment = require('moment'); // For date handling.
 var ClimbSchema = new Schema({
     gym: { type: Schema.ObjectId, ref: 'Gym' },
     location: { type: Schema.ObjectId, ref: 'Wall' },
-    type: {type: String, required: true, max: 100},
+    type: {type: String, required: true, enum:['Boulder', 'Top Rope', 'Lead', 'Training'], default:'Boulder'},
     color: {type: String, required: true, max: 100},
     grade: {type: String, required: true, max: 100},
     // Optionals
@@ -21,6 +21,11 @@ ClimbSchema
 .virtual('url')
 .get(function () {
   return '/catalog/climb/'+this._id;
+});
+ClimbSchema
+.virtual('imgurl')
+.get(function () {
+  return '/public/images/'+this.climb_image;
 });
 
 ClimbSchema
