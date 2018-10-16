@@ -12,7 +12,7 @@ var LocalStrategy = require('passport-local').Strategy;
 // var routes = require('./routes/index');
 // var users = require('./routes/users');
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/users'); //for login
 var climbRouter = require('./routes/climbs');  //Import routes for "climbs" area of site
 
 var app = express();
@@ -53,10 +53,10 @@ app.use('/climbs', climbRouter);
 app.use('/users', usersRouter); 
 
 //passport config
-var Account = require('./models/account');
-passport.use(new LocalStrategy(Account.authenticate()));
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
+var Climber = require('./models/climber');
+passport.use(new LocalStrategy(Climber.authenticate()));
+passport.serializeUser(Climber.serializeUser());
+passport.deserializeUser(Climber.deserializeUser());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
