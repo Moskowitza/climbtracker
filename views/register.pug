@@ -10,6 +10,22 @@ block content
           input.form-control(type='text', name="username", placeholder='Enter Username')
       .form-group
         input.form-control(type='password', name="password", placeholder='Password')
+      .form-group
+        input.form-control(type='email', name="email", placeholder='Email')
+      .form-group
+        input.form-control(type='date', name="date_of_birth", placeholder='Birth Date')
+      .form-group
+        input.form-control(type='text', name="gender", placeholder='Birth Date')
+      .form-group
+        input.form-control(type='number', name="height_feet", placeholder='Birth Date')
+      .form-group
+        input.form-control(type='number', name="height_inch", placeholder='Birth Date')
+      .form-group
+        label Gym Memberships:
+          for gym in gyms
+            input.form-contorl(type='checkbox', name="gym_memberships", id=gym._id, value=gym._id, checked=gym.checked )
+            label(for=genre._id) #{gym.name}
+      
       button.btn.btn-default(type='submit') Submit
       
       a(href='/')

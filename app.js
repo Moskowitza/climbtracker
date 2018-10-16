@@ -29,7 +29,8 @@ require('./models/climbInstance');
 require('./models/gym');
 require('./models/setter');
 require('./models/wall');
-// view engine setup
+// view engine setup  (Not sure why pug is being weird now)
+app.engine('pug', require('pug').__express)
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 //error logger and whatever we need cors for
