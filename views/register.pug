@@ -5,7 +5,7 @@ block content
     h1 Register Page
     p.lead We loaded Register page.
     br
-    form(role='form', action="/register",method="post", style='max-width: 300px;')
+    form(role='form', action="/climber/register",method="post", style='max-width: 300px;')
       .form-group
           input.form-control(type='text', name="username", placeholder='Enter Username')
       .form-group
@@ -15,16 +15,16 @@ block content
       .form-group
         input.form-control(type='date', name="date_of_birth", placeholder='Birth Date')
       .form-group
-        input.form-control(type='text', name="gender", placeholder='Birth Date')
+        input.form-control(type='text', name="gender", placeholder='gender')
       .form-group
-        input.form-control(type='number', name="height_feet", placeholder='Birth Date')
+        input.form-control(type='number', name="height_feet", placeholder='height-feet')
       .form-group
-        input.form-control(type='number', name="height_inch", placeholder='Birth Date')
+        input.form-control(type='number', name="height_inch", placeholder='height-inches')
       .form-group
         label Gym Memberships:
           for gym in gyms
             input.form-contorl(type='checkbox', name="gym_memberships", id=gym._id, value=gym._id, checked=gym.checked )
-            label(for=genre._id) #{gym.name}
+            label(for=genre._id) #{gym.gymname}
       
       button.btn.btn-default(type='submit') Submit
       

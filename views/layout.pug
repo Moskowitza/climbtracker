@@ -29,13 +29,13 @@ html(lang='en')
               li 
                 a(href='/climbs/bookinstances') All Climb Attempts
               li 
-            if (!user)
-              a(href="/users/login") Login
+            if (!climber)
+              a(href="/climber/login") Login
               br
-              a(href="/users/register") Register
-            if (user)
-              p You are currently logged in as #{user.username}
-              a(href="/users/logout") Logout
+              a(href="/climber/register") Register
+            if (climber)
+              p You are currently logged in as #{climber.username}
+              a(href="/climber/logout") Logout
               ul(class='sidebar-nav')
                 hr
                 li 
