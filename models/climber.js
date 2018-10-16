@@ -1,10 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-// const crypto = require('crypto');
-// const jwt = require('jsonwebtoken');
-var moment = require('moment'); // For date handling.
 var passportLocalMongoose = require('passport-local-mongoose');
-
+var moment = require('moment'); // For date handling.
 
 var ClimberSchema = new Schema({
     username: {type: String, required: true, max: 100},

@@ -27,7 +27,7 @@ exports.climber_register_get = function (req, res, next) {
         },
     }, function (err, results) {
         if (err) { return next(err); }
-        res.render('register', { title: 'Register for climb Tracker', gyms: results.gyms});
+        res.render('register', { title: 'Register for climb Tracker', gyms: results.gyms });
     });
 
 };
@@ -57,31 +57,27 @@ exports.climber_register_post = [
     // Process request after validation and sanitization.
     (req, res, next) => {
 
-
         // Extract the validation errors from a request.
         const errors = validationResult(req);
 
         // Create a Book object with escaped and trimmed data.
-        var climber = new Climber(
-            {
-                username: req.body.username,
-                password: req.body.password,
-                email: req.body.email,
-                date_of_birth: req.body.date_of_birth,
-                gender: req.body.gender,
-                height_feet: req.body.height_feet,
-                height_inch: req.body.height_inch,
-                gym_memberships: req.body.gym_memberships
-            });
+        var climber = {
+            username: req.body.username,
+            // password: req.body.password,
+            email: req.body.email,
+            date_of_birth: req.body.date_of_birth,
+            gender: req.body.gender,
+            height_feet: req.body.height_feet,
+            height_inch: req.body.height_inch,
+            gym_memberships: req.body.gym_memberships
+        }
+        //     ;
 
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values/error messages.
 
             // Get all gyms for form again.
             async.parallel({
-                climbers: function(callback) {
-                    Climber.find(callback);
-                },
                 gyms: function (callback) {
                     Gym.find(callback);
                 },
@@ -90,21 +86,34 @@ exports.climber_register_post = [
 
                 // Mark our selected gyms as checked.
                 for (let i = 0; i < results.gyms.length; i++) {
-                    if (climber.gym.indexOf(results.gyms[i]._id) > -1) {
+                    if (climber.gym_memberships.indexOf(results.gyms[i]._id) > -1) {
                         results.gyms[i].checked = 'true';
                     }
                 }
-                res.render('register', { title: 'Create POST ROUTE Climber', climbers: results.climber, gyms: results.gyms, errors: errors.array() });
+                res.render('register', { title: 'Create POST ROUTE Climber', gyms: results.gyms, errors: errors.array() });
             });
             return;
         }
         else {
+            
             // Data from form is valid. Save climber.
-            climber.register(function (err) {
-                if (err) { return next(err); }
-                // Successful - redirect to new climber record.
+            Climber.register(new Climber({
+                username:req.body.username,
+                password:req.body.password,
+                email: req.body.email,
+                date_of_birth: req.body.date_of_birth,
+                gender: req.body.gender,
+                height_feet: req.body.height_feet,
+                height_inch: req.body.height_inch,
+                gym_memberships: req.body.gym_memberships
+            }), req.body.password, function (err, climber) {
+                if (err) {
+                    return res.send(err);
+                }
+
                 passport.authenticate('local')(req, res, function () {
-                    res.redirect(climber.url);
+                    res.send('registration worked')
+                    // res.redirect(climber.url);
                 });
 
             });

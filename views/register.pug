@@ -25,10 +25,13 @@ block content
         div
           for gym in gyms
             div(style='display: block; padding-right:10px;')
-              input.form-contorl(type='checkbox', name="gym_memberships", id=gym._id, value=gym._id, checked=gym.checked)
+              input.checkbox-input(type='checkbox', name="gym", id=gym._id, value=gym._id, checked=gym.checked)
               label(for=gym._id) #{gym.gymname}
-      
       button.btn.btn-default(type='submit') Submit
-      
       a(href='/')
         button.btn.btn-primary(type="button") Cancel
+  
+  //- if errors 
+  //-   ul
+  //-     for error in errors
+  //-       li!= error.msg

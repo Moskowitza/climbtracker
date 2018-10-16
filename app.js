@@ -48,16 +48,21 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// requires the model with Passport-Local Mongoose plugged in
+var Climber = require('./models/climber');
+Climber.createStrategy();
+// CHANGE: USE "createStrategy" INSTEAD OF "authenticate"
+passport.use(Climber.createStrategy());
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(Climber.serializeUser());
+passport.deserializeUser(Climber.deserializeUser());
+
+
 app.use('/', indexRouter);
 app.use('/climbs', climbRouter);
 //This is the index file in the tutorial
 app.use('/climber',climberRouter); 
 
-//passport config
-var Climber = require('./models/climber');
-passport.use(new LocalStrategy(Climber.authenticate()));
-passport.serializeUser(Climber.serializeUser());
-passport.deserializeUser(Climber.deserializeUser());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
