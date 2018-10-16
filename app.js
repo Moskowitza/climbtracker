@@ -12,7 +12,7 @@ var LocalStrategy = require('passport-local').Strategy;
 // var routes = require('./routes/index');
 // var users = require('./routes/users');
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users'); //for login
+var climberRouter = require('./routes/climbers'); //for login
 var climbRouter = require('./routes/climbs');  //Import routes for "climbs" area of site
 
 var app = express();
@@ -51,7 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/climbs', climbRouter);
 //This is the index file in the tutorial
-app.use('/users', usersRouter); 
+app.use('/climber',climberRouter); 
 
 //passport config
 var Climber = require('./models/climber');

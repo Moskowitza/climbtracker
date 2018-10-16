@@ -5,30 +5,27 @@ var passport = require('passport');
 var Climber = require('../models/climber');
 var Gym = require('../models/gym');
 var router = express.Router();
-var climb_controller = require('../controllers/userController');
+var climber_controller = require('../controllers/climberController');
 
 // KEEP AN EYE ON THIS ROUTE
-router.get('/', function (req, res) {
-  res.render('index', { user: req.user });
-});
+router.get('/:id', climber_controller.climber_profile_get);
 
-router.get('/register', function (req, res) {
-  res.render('register', {});
-});
+router.get('/register', climber_controller.climber_register_get);
 
-router.post('/register', function (req, res) {
-  Climber.register(new Climber({
-    username: req.body.username
-  }), req.body.password, function (err, climber) {
-    if (err) {
-      return res.render('register', { climber: climber });
-    }
+router.post('/register',climber_controller.climber_register_post);
+//  function (req, res) {
+//   Climber.register(new Climber({
+//     username: req.body.username
+//   }), req.body.password, function (err, climber) {
+//     if (err) {
+//       return res.render('register', { climber: climber });
+//     }
 
-    passport.authenticate('local')(req, res, function () {
-      res.redirect('/');
-    });
-  });
-});
+//     passport.authenticate('local')(req, res, function () {
+//       res.redirect('/');
+//     });
+//   });
+// });
 
 router.get('/login', function (req, res) {
   res.render('login', { user: req.user });

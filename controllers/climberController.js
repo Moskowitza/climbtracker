@@ -6,20 +6,21 @@ const { sanitizeBody } = require('express-validator/filter');
 
 var async = require('async');
 
-// Display list of all books.
-exports.climber_create_get = function(req, res, next) {
+exports.climber_profile_get = function(req, res, next) {
+res.send("climber profile")
+};
+
+// We are going to render the register page
+exports.climber_register_get = function(req, res, next) {
 
     // Get all authors and genres, which we can use for adding to our book.
     async.parallel({
-        authors: function(callback) {
-            Author.find(callback);
-        },
-        genres: function(callback) {
-            Genre.find(callback);
+        gyms: function(callback) {
+            Gym.find(callback);
         },
     }, function(err, results) {
         if (err) { return next(err); }
-        res.render('book_form', { title: 'Create Book',authors:results.authors, genres:results.genres });
+        res.render('register', { title: 'Create Book',gyms:results.gyms, genres:results.genres });
     });
 
 };
@@ -27,26 +28,25 @@ exports.climber_create_get = function(req, res, next) {
 
 // Handle book create on POST.
 exports.climber_create_post = [
-    // Convert the genre to an array.
+    // Convert the Gyms to an array.
     (req, res, next) => {
-        if(!(req.body.genre instanceof Array)){
-            if(typeof req.body.genre==='undefined')
-            req.body.genre=[];
+        if(!(req.body.gym instanceof Array)){
+            if(typeof req.body.gym==='undefined')
+            req.body.gym=[];
             else
-            req.body.genre=new Array(req.body.genre);
+            req.body.gym=new Array(req.body.gym);
         }
         next();
     },
 
     // Validate fields.
-    body('title', 'Title must not be empty.').isLength({ min: 1 }).trim(),
-    body('author', 'Author must not be empty.').isLength({ min: 1 }).trim(),
-    body('summary', 'Summary must not be empty.').isLength({ min: 1 }).trim(),
-    body('isbn', 'ISBN must not be empty').isLength({ min: 1 }).trim(),
+    body('username', 'username must not be empty.').isLength({ min: 1 }).trim(),
+    body('password', 'Password must not be empty.').isLength({ min: 1 }).trim(),
+    body('email', 'Email must not be empty.').isLength({ min: 1 }).trim(),
   
     // Sanitize fields.
     sanitizeBody('*').trim().escape(),
-    sanitizeBody('genre.*').trim().escape(),
+    sanitizeBody('gym.*').trim().escape(),
     // Process request after validation and sanitization.
     (req, res, next) => {
         
@@ -55,46 +55,56 @@ exports.climber_create_post = [
         const errors = validationResult(req);
 
         // Create a Book object with escaped and trimmed data.
-        var book = new Book(
-          { title: req.body.title,
-            author: req.body.author,
-            summary: req.body.summary,
-            isbn: req.body.isbn,
-            genre: req.body.genre
+        var climber = new Climber(
+          { username: req.body.title,
+            password: req.body.password,
+            date_of_birth: req.body.date_of_birth,
+            gender: req.body.gender,
+            height_feet: req.body.height_feet,
+            height_inch:req.body.height_inch,
+            gym_memberships:req.body.gym_memberships
            });
 
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values/error messages.
 
-            // Get all authors and genres for form.
+            // Get all gyms for form again.
             async.parallel({
-                authors: function(callback) {
-                    Author.find(callback);
-                },
-                genres: function(callback) {
-                    Genre.find(callback);
+                // climbers: function(callback) {
+                //     Climber.find(callback);
+                // },
+                gyms: function(callback) {
+                    Gym.find(callback);
                 },
             }, function(err, results) {
                 if (err) { return next(err); }
 
-                // Mark our selected genres as checked.
-                for (let i = 0; i < results.genres.length; i++) {
-                    if (book.genre.indexOf(results.genres[i]._id) > -1) {
-                        results.genres[i].checked='true';
+                // Mark our selected gyms as checked.
+                for (let i = 0; i < results.gyms.length; i++) {
+                    if (climber.gym.indexOf(results.gyms[i]._id) > -1) {
+                        results.gyms[i].checked='true';
                     }
                 }
-                res.render('book_form', { title: 'Create Book',authors:results.authors, genres:results.genres, book: book, errors: errors.array() });
+                res.render('register', { title: 'Create Book',authors:results.authors, genres:results.genres, book: book, errors: errors.array() });
             });
             return;
         }
         else {
-            // Data from form is valid. Save book.
-            book.save(function (err) {
+            // Data from form is valid. Save climber.
+            climber.save(function (err) {
                 if (err) { return next(err); }
-                   // Successful - redirect to new book record.
-                   res.redirect(book.url);
+                   // Successful - redirect to new climber record.
+                   res.redirect(climber.url);
                 });
         }
     }
 ];
 
+exports.climber_login_get= function(req, res, next) {
+    res.send("Login get route");
+    // res.render('login', { user: req.user })
+}
+exports.climber_login_post= function(req, res, next) {
+    res.send("Login POST route");
+    // res.render('login', { user: req.user })
+}
