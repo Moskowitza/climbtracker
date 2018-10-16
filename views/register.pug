@@ -23,8 +23,8 @@ block content
       .form-group
         label Gym Memberships:
           for gym in gyms
-            input.form-contorl(type='checkbox', name="gym_memberships", id=gym._id, value=gym._id, checked=gym.checked )
-            label(for=genre._id) #{gym.gymname}
+            input.form-contorl(type='checkbox', name="gyms", id=gym._id, value=gym._id, checked=gym.checked )
+            label(for=gym._id) #{gym.gymname}
       
       button.btn.btn-default(type='submit') Submit
       

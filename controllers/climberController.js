@@ -27,7 +27,7 @@ exports.climber_register_get = function (req, res, next) {
         },
     }, function (err, results) {
         if (err) { return next(err); }
-        res.render('register', { title: 'Create Climber', gyms: results.gyms});
+        res.render('register', { title: 'Register for climb Tracker', gyms: results.gyms});
     });
 
 };
@@ -100,10 +100,13 @@ exports.climber_register_post = [
         }
         else {
             // Data from form is valid. Save climber.
-            climber.save(function (err) {
+            climber.register(function (err) {
                 if (err) { return next(err); }
                 // Successful - redirect to new climber record.
-                res.redirect(climber.url);
+                passport.authenticate('local')(req, res, function () {
+                    res.redirect(climber.url);
+                });
+
             });
         }
     }
