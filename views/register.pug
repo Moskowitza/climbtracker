@@ -22,9 +22,11 @@ block content
         input.form-control(type='number', name="height_inch", placeholder='height-inches')
       .form-group
         label Gym Memberships:
+        div
           for gym in gyms
-            input.form-contorl(type='checkbox', name="gyms", id=gym._id, value=gym._id, checked=gym.checked )
-            label(for=gym._id) #{gym.gymname}
+            div(style='display: block; padding-right:10px;')
+              input.form-contorl(type='checkbox', name="gym_memberships", id=gym._id, value=gym._id, checked=gym.checked)
+              label(for=gym._id) #{gym.gymname}
       
       button.btn.btn-default(type='submit') Submit
       
