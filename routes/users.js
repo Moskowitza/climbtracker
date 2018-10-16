@@ -3,6 +3,7 @@
 var express = require('express');
 var passport = require('passport');
 var Climber = require('../models/climber');
+var Gym = require('../models/gym');
 var router = express.Router();
 
 // KEEP AN EYE ON THIS ROUTE
