@@ -8,15 +8,32 @@ const { sanitizeBody } = require('express-validator/filter');
 var async = require('async');
 
 exports.climber_profile_get = function (req, res, next) {
-    res.send("climber_profile_get not Implemented");
+    // res.send("climber_profile_get not Implemented");
     // We'll fix this up soon
-    // async.parallel({
-    //     climber: function (callback) {
-    //         Climber.find(callback);
-    //     },function (err, results) {
-    //         if (err) { return next(err); }
-    //         res.render('climberprofile', { title: 'climberProfile', climber: results.climber });
-    //     });
+    async.parallel({
+        climber: function(callback) {
+
+            climber.findById(req.params.id)
+              .populate('gyms')
+            //   .populate('genre')
+              .exec(callback);
+        },
+        // book_instance: function(callback) {
+
+        //   BookInstance.find({ 'book': req.params.id })
+        //   .exec(callback);
+        // },
+    }, function(err, results) {
+        if (err) { return next(err); }
+        if (results.book==null) { // No results.
+            var err = new Error('Climber not found');
+            err.status = 404;
+            return next(err);
+        }
+        // Successful, so render.
+        res.render('climber', { title: 'Climber Name', climber: results.climber } );
+    });
+
 };
 
 // We are going to render the register page
@@ -83,7 +100,6 @@ exports.climber_register_post = [
             return;
         }
         else {
-            console.log("HEY, we made it to else")
             Climber.register(climber, req.body.password, function (err, climber) {
                 if (err) {
                     async.parallel({
@@ -100,22 +116,11 @@ exports.climber_register_post = [
                         res.render('register', { title: 'Register error', climber: climber, gyms: results.gyms });
                     })
                 }
-                //     async.parallel({
-                //         gyms: function (callback) {
-                //             Gym.find(callback);
-                //         },
-                //     }, function (err, results) {
-                //         if (err) { return next(err); }
-                //         // Mark our selected genres as checked.
-                //         for (let i = 0; i < results.gyms.length; i++) {
-                //             if (climber.gym_memberships.indexOf(results.gyms[i]._id) > -1) {
-                //                 results.gyms[i].checked = 'true';
-                //             }
-                //         }
+
                 passport.authenticate('local')(req, res, function () {
-                    res.redirect('/');
+                    // res.redirect('/climber/'+climber._id);
                     // res.send('registration worked');
-                    // res.redirect(climber.url);
+                    res.redirect(climber.url);
                 });
             });
         }

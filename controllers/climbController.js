@@ -6,7 +6,6 @@ var Climb = require('../models/climb');
 var async = require('async');
 
 exports.index = function (req, res) {
-
     async.parallel({
         climb_count: function (callback) {
             Climb.countDocuments(callback);
@@ -15,7 +14,6 @@ exports.index = function (req, res) {
         res.render('index', { title: 'Gym Climbing Home', error: err, data: results });
     });
 };
-
 exports.climb_list = function (req, res, next) {
 // find({}, the fields we want returned, if we don't need all)
     Climb.find()

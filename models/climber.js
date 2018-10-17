@@ -22,7 +22,7 @@ ClimberSchema
 ClimberSchema
 .virtual('url')
 .get(function () {
-  return '/catalog/climber/'+this._id;
+  return '/climber/'+this._id;
 });
 
 ClimberSchema.plugin(passportLocalMongoose);
