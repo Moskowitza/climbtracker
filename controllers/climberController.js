@@ -1,5 +1,6 @@
 var Gym = require('../models/gym');
 var Climber = require('../models/climber');
+var passport = require('passport');
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -33,50 +34,37 @@ exports.climber_register_get = function (req, res, next) {
 };
 
 
-// Handle book create on POST.
+
 exports.climber_register_post = [
-    // Convert the Gyms to an array.
+
     (req, res, next) => {
-        if (!(req.body.gym instanceof Array)) {
-            if (typeof req.body.gym === 'undefined')
-                req.body.gym = [];
+        if (!(req.body.gym_memberships instanceof Array)) {
+            if (typeof req.body.gym_memberships === 'undefined')
+                req.body.gym_memberships = [];
             else
-                req.body.gym = new Array(req.body.gym);
+                req.body.gym_memberships = new Array(req.body.gym_memberships);
         }
         next();
     },
-
-    // Validate fields.
     body('username', 'username must not be empty.').isLength({ min: 1 }).trim(),
-    body('password', 'Password must not be empty.').isLength({ min: 1 }).trim(),
-    body('email', 'Email must not be empty.').isLength({ min: 1 }).trim(),
-
-    // Sanitize fields.
+    // Sanitize fields (using wildcard).
     sanitizeBody('*').trim().escape(),
-    sanitizeBody('gym.*').trim().escape(),
-    // Process request after validation and sanitization.
+    sanitizeBody('gym_memberships.*').trim().escape(),
     (req, res, next) => {
-
-        // Extract the validation errors from a request.
         const errors = validationResult(req);
-
-        // Create a Book object with escaped and trimmed data.
-        var climber = {
+        var climber = new Climber({
             username: req.body.username,
-            // password: req.body.password,
+            // password:req.body.password,
             email: req.body.email,
             date_of_birth: req.body.date_of_birth,
             gender: req.body.gender,
             height_feet: req.body.height_feet,
             height_inch: req.body.height_inch,
             gym_memberships: req.body.gym_memberships
-        }
-        //     ;
-
+        });
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values/error messages.
-
-            // Get all gyms for form again.
+            // Get all  and gym_memberships for form.
             async.parallel({
                 gyms: function (callback) {
                     Gym.find(callback);
@@ -84,42 +72,55 @@ exports.climber_register_post = [
             }, function (err, results) {
                 if (err) { return next(err); }
 
-                // Mark our selected gyms as checked.
+                // Mark our selected genres as checked.
                 for (let i = 0; i < results.gyms.length; i++) {
                     if (climber.gym_memberships.indexOf(results.gyms[i]._id) > -1) {
                         results.gyms[i].checked = 'true';
                     }
                 }
-                res.render('register', { title: 'Create POST ROUTE Climber', gyms: results.gyms, errors: errors.array() });
+                res.render('register', { title: 'Register for climb Tracker', gyms: results.gyms });
             });
             return;
         }
         else {
-            
-            // Data from form is valid. Save climber.
-            Climber.register(new Climber({
-                username:req.body.username,
-                password:req.body.password,
-                email: req.body.email,
-                date_of_birth: req.body.date_of_birth,
-                gender: req.body.gender,
-                height_feet: req.body.height_feet,
-                height_inch: req.body.height_inch,
-                gym_memberships: req.body.gym_memberships
-            }), req.body.password, function (err, climber) {
+            console.log("HEY, we made it to else")
+            Climber.register(climber, req.body.password, function (err, climber) {
                 if (err) {
-                    return res.send(err);
+                    async.parallel({
+                        gyms: function (callback) {
+                            Gym.find(callback);
+                        },
+                    }, function (err, results) {
+                        if (err) { return next(err); }
+                        for (let i = 0; i < results.gyms.length; i++) {
+                            if (req.body.gym_memberships.indexOf(results.gyms[i]._id) > -1) {
+                                results.gyms[i].checked = 'true';
+                            }
+                        }
+                        res.render('register', { title: 'Register error', climber: climber, gyms: results.gyms });
+                    })
                 }
-
+                //     async.parallel({
+                //         gyms: function (callback) {
+                //             Gym.find(callback);
+                //         },
+                //     }, function (err, results) {
+                //         if (err) { return next(err); }
+                //         // Mark our selected genres as checked.
+                //         for (let i = 0; i < results.gyms.length; i++) {
+                //             if (climber.gym_memberships.indexOf(results.gyms[i]._id) > -1) {
+                //                 results.gyms[i].checked = 'true';
+                //             }
+                //         }
                 passport.authenticate('local')(req, res, function () {
-                    res.send('registration worked')
+                    res.redirect('/');
+                    // res.send('registration worked');
                     // res.redirect(climber.url);
                 });
-
             });
         }
     }
-];
+]
 
 exports.climber_login_get = function (req, res, next) {
     res.send("Login GET route");
