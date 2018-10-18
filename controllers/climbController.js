@@ -11,7 +11,7 @@ exports.index = function (req, res) {
             Climb.countDocuments(callback);
         }
     }, function (err, results) {
-        res.render('index', { title: 'Gym Climbing Home', climber : req.climber, error: err, data: results });
+        res.render('index', { title: 'Gym Climbing Home', climber : req.user, error: err, data: results });
     });
 };
 exports.climb_list = function (req, res, next) {
@@ -24,7 +24,7 @@ exports.climb_list = function (req, res, next) {
             if (err) { return next(err); }
             // Successful, so render
             // res.json(list_climbs);
-            res.render('climb_list', { title: 'Climb List', climber:req.climber, climb_list: list_climbs });
+            res.render('climb_list', { title: 'Climb List', climber:req.user, climb_list: list_climbs });
         });
 
 };

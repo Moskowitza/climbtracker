@@ -1,7 +1,8 @@
 var Gym = require('../models/gym');
 var Climber = require('../models/climber');
 var passport = require('passport');
-
+const express = require('express');
+const router = express.Router();
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
@@ -110,7 +111,7 @@ exports.climber_register_post = [
                                 results.gyms[i].checked = 'true';
                             }
                         }
-                        res.render('register', { title: 'Register error', climber: req.climber, gyms: results.gyms, error: err.message });
+                        res.render('register', { title: 'Register error', climber: req.user, gyms: results.gyms, error: err.message });
                     })
                 }
 
@@ -128,18 +129,19 @@ exports.climber_register_post = [
 ]
 
 exports.climber_login_get = function (req, res, next) {
-    res.render('login', { climber: req.climber })
+    res.render('login',{ user : req.user, error : req.flash('error')});
 }
-exports.climber_login_post = function (req, res, next) {
-    passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), (req, res, next) => {
+exports.climber_login_post = [
+    passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), 
+    (req, res, next) => {
         req.session.save((err) => {
             if (err) {
                 return next(err);
             }
             res.redirect('/');
         });
-}
-
+    }
+]
 exports.climber_logout = function (req, res, next) {
     req.logout();
     res.redirect('/');

@@ -23,11 +23,6 @@ app.engine('pug', require('pug').__express)
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use('/', indexRouter);
-app.use('/climbs', climbRouter);
-//This is the index file in the tutorial
-app.use('/climber',climberRouter); 
-
 
 
 //error logger and whatever we need cors for
@@ -45,6 +40,12 @@ app.use(passport.initialize());
 app.use(flash());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', indexRouter);
+app.use('/climbs', climbRouter);
+//This is the index file in the tutorial
+app.use('/climber',climberRouter); 
+
 
 //Set up mongoose connection
 var mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/climbtracker'
