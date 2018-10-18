@@ -3,9 +3,15 @@ extends layout
 block content
   h1= title
   p Welcome to #[em ClimbingTracker], to keep track of your gym climbs.
-
+  .container
+    if (!climber)
+      a(href="/climber/login") Login
+      br
+      a(href="/climber/register") Register
+    if (climber)
+      p You are currently logged in as #{climber.username}
+      a(href="/climber/logout") Logout
   h1 Dynamic content
-  
   if error
     p Error getting dynamic content.
   else

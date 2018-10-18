@@ -13,35 +13,11 @@ router.get('/climber/:id', climber_controller.climber_profile_get);
 router.get('/register', climber_controller.climber_register_get);
 
 router.post('/register',climber_controller.climber_register_post);
-//  function (req, res) {
-//   Climber.register(new Climber({
-//     username: req.body.username
-//   }), req.body.password, function (err, climber) {
-//     if (err) {
-//       return res.render('register', { climber: climber });
-//     }
 
-//     passport.authenticate('local')(req, res, function () {
-//       res.redirect('/');
-//     });
-//   });
-// });
+router.get('/login', climber_controller.climber_login_get);
 
-// router.get('/login', function (req, res) {
-//   res.render('login', { user: req.user });
-// });
+router.post('/login',climber_controller.climber_login_post);
 
-// router.post('/login', passport.authenticate('local'), function (req, res) {
-//   res.redirect('/');
-// });
-
-// router.get('/logout', function (req, res) {
-//   req.logout();
-//   res.redirect('/');
-// });
-
-// router.get('/ping', function (req, res) {
-//   res.status(200).send("pong!");
-// });
+router.get('/logout', climber_controller.climber_logout);
 
 module.exports = router;

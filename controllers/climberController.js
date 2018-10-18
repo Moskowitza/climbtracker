@@ -11,27 +11,27 @@ exports.climber_profile_get = function (req, res, next) {
     // res.send("climber_profile_get not Implemented");
     // We'll fix this up soon
     async.parallel({
-        climber: function(callback) {
+        climber: function (callback) {
 
             climber.findById(req.params.id)
-              .populate('gyms')
-            //   .populate('genre')
-              .exec(callback);
+                .populate('gyms')
+                //   .populate('genre')
+                .exec(callback);
         },
         // book_instance: function(callback) {
 
         //   BookInstance.find({ 'book': req.params.id })
         //   .exec(callback);
         // },
-    }, function(err, results) {
+    }, function (err, results) {
         if (err) { return next(err); }
-        if (results.book==null) { // No results.
+        if (results.book == null) { // No results.
             var err = new Error('Climber not found');
             err.status = 404;
             return next(err);
         }
         // Successful, so render.
-        res.render('climber', { title: 'Climber Name', climber: results.climber } );
+        res.render('climber', { title: 'Climber Name', climber: results.climber });
     });
 
 };
@@ -50,10 +50,7 @@ exports.climber_register_get = function (req, res, next) {
 
 };
 
-
-
 exports.climber_register_post = [
-
     (req, res, next) => {
         if (!(req.body.gym_memberships instanceof Array)) {
             if (typeof req.body.gym_memberships === 'undefined')
@@ -113,25 +110,37 @@ exports.climber_register_post = [
                                 results.gyms[i].checked = 'true';
                             }
                         }
-                        res.render('register', { title: 'Register error', climber: climber, gyms: results.gyms });
+                        res.render('register', { title: 'Register error', climber: req.climber, gyms: results.gyms, error: err.message });
                     })
                 }
 
                 passport.authenticate('local')(req, res, function () {
-                    // res.redirect('/climber/'+climber._id);
-                    // res.send('registration worked');
-                    res.redirect(climber.url);
+                    req.session.save(function (err) {
+                        if (err) {
+                            return next(err);
+                        }
+                        res.redirect(climber.url);
+                    });
                 });
-            });
+            })
         }
     }
 ]
 
 exports.climber_login_get = function (req, res, next) {
-    res.send("Login GET route");
-    // res.render('login', { user: req.user })
+    res.render('login', { climber: req.climber })
 }
 exports.climber_login_post = function (req, res, next) {
-    res.send("Login POST route");
-    // res.render('login', { user: req.user })
+    passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), (req, res, next) => {
+        req.session.save((err) => {
+            if (err) {
+                return next(err);
+            }
+            res.redirect('/');
+        });
+}
+
+exports.climber_logout = function (req, res, next) {
+    req.logout();
+    res.redirect('/');
 }
